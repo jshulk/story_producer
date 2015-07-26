@@ -9,7 +9,7 @@ exports.init = function(){
 		var tasks = [
 			createConnection,
 			createExchange,
-			createQueue
+			configureQueue
 		];
 
 		async.waterfall(tasks, function(err, results){
@@ -30,7 +30,8 @@ function createConnection(callback){
 	})
 	.catch(function(){
 		callback({msg: "Could not establish connection"}, null);
-	});
+	})
+	.done();
 	
 }
 
@@ -49,7 +50,7 @@ function createExchange(connection, callback){
 function configureQueue(connection, exchange, callback){
 	queue.configure(connection)
 	.then(function(queue){
-		callback(null, queue);
+		callback(null, queue, exchange);
 	})
 	.catch(function(){
 		callback({msg: "could not create queue"}, null);
