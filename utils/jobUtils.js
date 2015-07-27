@@ -4,7 +4,7 @@ var stories = require("../jobs/stories"),
 
 var jobUtils = {
 	configureStoriesJob: function(){
-		var job = new CronJob(appConstants.cronTime, stories.refreshTopStories);
+		var job = new CronJob(appConstants.cronTime, stories.fetchTopStories);
 		job.start();
 	},
 	/**

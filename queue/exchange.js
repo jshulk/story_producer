@@ -1,10 +1,12 @@
 var amqp = require("amqp"),
 	Q = require("q"),
 	config = require("../config/messagingConfig");
-var exchange ;
+var ex ;
 
-exports.getExchange = function(){
-	return exchange;
+exports.get = function(){
+	console.log('exchange in get');
+	console.log(ex);
+	return ex;
 
 };
 /**
@@ -14,7 +16,7 @@ exports.getExchange = function(){
 exports.create = function(connection){
 	var deferred = Q.defer();
 		connection.exchange(config.STORY_EXCHANGE, config.exchangeProps, function(exchange){
-		 	exchange = exchange;
+		 	ex = exchange;
 		 	deferred.resolve(exchange);
 		});
 

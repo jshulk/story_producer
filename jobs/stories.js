@@ -1,14 +1,17 @@
-var hnservice = require("../services/hnservice");
-var stories = {
-	refreshTopStories: function(){
-		console.log("Starting refresh stories job.............");
+var webApi = require("../utils/webApi"),
+	_ = require("lodash"),
+	exchange = require("../queue/exchange"),
+	producer = require('../producer/storyProducer');
 
-		hnservice.saveDocument("Dummy document");
-		
-		hnservice.fetchTopStories()
+var stories = {
+	fetchTopStories: function(){
+		console.log("Starting refresh stories job.............");
+		//hnservice.saveDocument("Dummy document");
+		webApi.fetchTopStories()
 		.then(function(storyIds){
 			console.log('story ids');
 			console.log(storyIds);
+			produceStoryMessages(storyIds);
 			console.log("finished refresh stories job..............");
 		})
 		.catch(function(){
@@ -18,5 +21,18 @@ var stories = {
 		.done();
 	}
 };
+
+
+function produceStoryMessages(storyIds){
+	console.log("produce story messages called");
+	console.log(exchange);
+	var ex = exchange.get();
+	if( ex ){
+		console.log("producing messages now");
+		_.each(storyIds, function(id){
+			producer.produce(ex, id);
+		}, this);	
+	}
+}
 
 module.exports = stories;

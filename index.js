@@ -1,6 +1,7 @@
 
 var bootstrap = require("./queue/bootstrap");
 var producer = require("./producer/storyProducer");
+var jobUtils = require("./utils/jobUtils");
 	
 	bootstrap.init()
 	.then(function(results){
@@ -11,7 +12,8 @@ var producer = require("./producer/storyProducer");
 	});
 
 function configureJobs(exchange){
-	console.log("Jobs configured");
-	producer.produce(exchange, "This is test message");
+	console.log("configuring jobs");
+	//producer.produce(exchange, "This is test message");
+	jobUtils.configureStoriesJob();
 }
 // 3. configure job and start it
