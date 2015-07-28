@@ -25,7 +25,7 @@ var messagingConfig = {
 		autoDelete: false
 	},
 	publishProps: {
-		contentType: "text/plain",
+		contentType: "application/json",
 		contentEncoding: "utf-8"
 	}
 };

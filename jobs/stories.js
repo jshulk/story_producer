@@ -9,8 +9,6 @@ var stories = {
 		//hnservice.saveDocument("Dummy document");
 		webApi.fetchTopStories()
 		.then(function(storyIds){
-			console.log('story ids');
-			console.log(storyIds);
 			produceStoryMessages(storyIds);
 			console.log("finished refresh stories job..............");
 		})
@@ -24,13 +22,16 @@ var stories = {
 
 
 function produceStoryMessages(storyIds){
-	console.log("produce story messages called");
-	console.log(exchange);
 	var ex = exchange.get();
 	if( ex ){
-		console.log("producing messages now");
+		// publish all the story ids
+		producer.produce(ex, {
+			type: "TOP_STORIES",
+			ids: storyIds
+		});
+
 		_.each(storyIds, function(id){
-			producer.produce(ex, id);
+			producer.produce(ex, {id: id});
 		}, this);	
 	}
 }

@@ -4,8 +4,6 @@ var amqp = require("amqp"),
 var ex ;
 
 exports.get = function(){
-	console.log('exchange in get');
-	console.log(ex);
 	return ex;
 
 };
