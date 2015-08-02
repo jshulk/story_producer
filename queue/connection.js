@@ -9,7 +9,7 @@ module.exports = {
 	},
 	create: function(){
 		var deferred = Q.defer();
-		amqp.createConnection(config.connectionProps.url)
+		amqp.connect(config.connectionProps.url)
 		.then(function(conn){
 			connection = conn;
 			//binding for interrupt event.
