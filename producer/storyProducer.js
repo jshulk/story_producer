@@ -1,7 +1,7 @@
-var config = require("../config/messagingConfig");
+var config = require("../config/messagingConfig"),
+	producerChannel = require("../channels/producerChannel");
 
-exports.produce = function(exchange, message){
-	exchange.publish(config.ROUTING_KEY, message, config.publishProps, function(value){
-		console.log("publication was "+ value);
-	});
+exports.produce = function(message){
+	var channel = producerChannel.get();
+	channel.publish(config.STORY_EXCHANGE, config.ROUTING_KEY, message, config.publishProps);
 }

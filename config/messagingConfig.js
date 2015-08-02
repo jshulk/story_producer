@@ -4,21 +4,11 @@ var messagingConfig = {
 	STORY_QUEUE: "HN_STORIES_Q",
 	ROUTING_KEY: "HN_STORIES_KEY",
 	connectionProps: { 
-		host: 'localhost', 
-		port: 5672,
-		login: 'guest',
-		password: 'guest', 
-		connectionTimeout: 10000, 
-		authMechanism: 'AMQPLAIN', 
-		vhost: '/', 
-		noDelay: true, 
-		ssl: { enabled : false}
+		url: "amqp://guest:guest@localhost:5672"
 	},
 	exchangeProps: {
 		type: "topic",
-		durable: true,
-		autoDelete: false,
-		confirm: true
+		durable: true
 	},
 	queueProps: {
 		durable: true,

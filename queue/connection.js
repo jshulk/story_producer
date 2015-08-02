@@ -1,4 +1,4 @@
-var amqp = require("amqp"),
+var amqp = require("amqplib"),
 	config = require('../config/messagingConfig'),
 	Q = require("q");
 var connection;
@@ -9,10 +9,17 @@ module.exports = {
 	},
 	create: function(){
 		var deferred = Q.defer();
-		var con =  amqp.createConnection(config.connectionProps);
-		con.on("ready", function(){
-			connection = con;
+		amqp.createConnection(config.connectionProps.url)
+		.then(function(conn){
+			connection = conn;
+			//binding for interrupt event.
+			process.once("SIGINT", conn.close.bind(conn));
 			deferred.resolve(connection);
+		})
+		.catch(function(err){
+			console.log("connection error");
+			console.log(err);
+			deferred.reject({message: "Could not establish connection"});
 		});
 		return deferred.promise;
 	}

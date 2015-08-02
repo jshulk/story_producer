@@ -2,14 +2,17 @@ var async = require("async"),
 	Q = require("q"),
 	exchange = require("./exchange"),
 	connection = require("./connection"),
+	producerChannel = require("../channels/producerChannel");
 	queue = require("./storyQueue");
 
 exports.init = function(){
 		var deferred = Q.defer();
 		var tasks = [
 			createConnection,
+			createChannel,
 			createExchange,
-			configureQueue
+			configureQueue,
+			bindQueue
 		];
 
 		async.waterfall(tasks, function(err, results){
@@ -35,10 +38,10 @@ function createConnection(callback){
 	
 }
 
-function createExchange(connection, callback){
-	exchange.create(connection)
+function createExchange(channel, callback){
+	exchange.create(channel)
 	.then(function(exchange){
-		callback(null, connection, exchange);
+		callback(null, channel);
 	})
 	.catch(function(){
 		callback({msg: "could not create exchange"}, null);
@@ -47,12 +50,33 @@ function createExchange(connection, callback){
 
 
 
-function configureQueue(connection, exchange, callback){
-	queue.configure(connection)
+function configureQueue(channel, callback){
+	queue.configure(channel)
 	.then(function(queue){
-		callback(null, queue, exchange);
+		callback(null, channel);
 	})
 	.catch(function(){
 		callback({msg: "could not create queue"}, null);
 	});
+}
+
+function createChannel(amqpConnection, callback){
+
+	producerChannel.create(amqpConnection)
+	.then(function(chan){
+		callback(null, chan);
+	})
+	.catch(function(err){
+		callback(err, null);
+	})
+}
+
+function bindQueue(channel, callback){
+	channel.bindQueue(config.STORY_QUEUE, config.STORY_EXCHANGE, config.ROUTING_KEY)
+	.then(function(){
+		callback(null, channel);
+	})
+	.catch(function(err){
+		callback(err, null);
+	})
 }

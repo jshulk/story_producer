@@ -1,6 +1,5 @@
 var webApi = require("../utils/webApi"),
 	_ = require("lodash"),
-	exchange = require("../queue/exchange"),
 	producer = require('../producer/storyProducer');
 
 var stories = {
@@ -22,18 +21,17 @@ var stories = {
 
 
 function produceStoryMessages(storyIds){
-	var ex = exchange.get();
-	if( ex ){
 		// publish all the story ids
-		producer.produce(ex, {
+		console.log("published top story ids");
+		producer.produce({
 			type: "TOP_STORIES",
 			ids: storyIds
 		});
 
 		_.each(storyIds, function(id){
-			producer.produce(ex, {id: id});
+			producer.produce({id: id});
 		}, this);	
-	}
+	
 }
 
 module.exports = stories;
