@@ -1,6 +1,7 @@
 var async = require("async"),
 	Q = require("q"),
 	exchange = require("./exchange"),
+	config = require("../config/messagingConfig"),
 	connection = require("./connection"),
 	producerChannel = require("../channels/producerChannel");
 	queue = require("./storyQueue");
@@ -55,7 +56,9 @@ function configureQueue(channel, callback){
 	.then(function(queue){
 		callback(null, channel);
 	})
-	.catch(function(){
+	.catch(function(err){
+		console.log("queue creation error");
+		console.log(err);
 		callback({msg: "could not create queue"}, null);
 	});
 }

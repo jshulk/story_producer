@@ -11,26 +11,28 @@ var stories = {
 			produceStoryMessages(storyIds);
 			console.log("finished refresh stories job..............");
 		})
-		.catch(function(){
+		.catch(function(err){
 			console.log("error occurred while fetching stories");
+			console.log("error");
+			console.log(err);
 			console.log("finished refresh stories job.............");
-		})
-		.done();
+		});
 	}
 };
 
 
 function produceStoryMessages(storyIds){
 		// publish all the story ids
+		console.log("produeStoryMessages called");
 		console.log("published top story ids");
 		producer.produce({
 			type: "TOP_STORIES",
 			ids: storyIds
 		});
 
-		_.each(storyIds, function(id){
-			producer.produce({id: id});
-		}, this);	
+		// _.each(storyIds, function(id){
+		// 	producer.produce({id: id});
+		// }, this);	
 	
 }
 
