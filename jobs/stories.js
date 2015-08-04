@@ -23,16 +23,14 @@ var stories = {
 
 function produceStoryMessages(storyIds){
 		// publish all the story ids
-		console.log("produeStoryMessages called");
-		console.log("published top story ids");
 		producer.produce({
 			type: "TOP_STORIES",
 			ids: storyIds
 		});
 
-		// _.each(storyIds, function(id){
-		// 	producer.produce({id: id});
-		// }, this);	
+		_.each(storyIds, function(id){
+			producer.produce({id: id});
+		}, this);	
 	
 }
 
